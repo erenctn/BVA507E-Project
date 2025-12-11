@@ -3,6 +3,7 @@ yfinance
 pandas
 numpy
 scikit-learn
+matplotlib
 plotly
 openai
 python-dotenv
