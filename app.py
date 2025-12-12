@@ -8,7 +8,7 @@ from utils import plot_price_and_indicators, plot_model_performance
 
 # Load .env
 load_dotenv()
-st.set_page_config(page_title="CryptoGuard AI Manager", layout="wide")
+st.set_page_config(page_title="CryptoSense AI Manager", layout="wide")
 
 # CSS Design
 st.markdown("""
@@ -36,7 +36,7 @@ TRANSLATIONS = {
         "strategy_label": "Strateji Hedefi",
         "strategies": ["Kısa Vadeli Al-Sat (Riskli)", "Orta Vadeli Trend Takibi", "Defansif / Koruma Amaçlı"],
         "lang_label": "Dil / Language",
-        "page_title": "CryptoGuard: Otonom Analiz Ajanı",
+        "page_title": "CryptoSense: Otonom Kripto Yatırım Ajanı",
         "page_subtitle": "ReAct (Reasoning & Acting) mimarisi ile çalışan, kendi kendine karar veren yapay zeka asistanı.",
         "start_btn": "Analizi Başlat",
         "react_title": "Ajanın Düşünce Günlüğü (Live ReAct Loop)",
@@ -72,7 +72,7 @@ TRANSLATIONS = {
         "strategy_label": "Strategy Goal",
         "strategies": ["Short-Term Trading (Risky)", "Mid-Term Trend Following", "Defensive / Preservation"],
         "lang_label": "Dil / Language",
-        "page_title": "CryptoGuard: Autonomous Analysis Agent",
+        "page_title": "CryptoSense: Autonomous Multi-Agent AI System",
         "page_subtitle": "An AI assistant powered by ReAct (Reasoning & Acting) architecture that makes autonomous decisions.",
         "start_btn": "Start Analysis",
         "react_title": "Agent's Thought Process (Live ReAct Loop)",
@@ -122,7 +122,7 @@ def translate_to_tr(text_input, client_instance):
         return text_input
 
 # --- SIDEBAR ---
-st.sidebar.title("CryptoGuard")
+st.sidebar.title("CryptoSense")
 lang_choice = st.sidebar.radio("Dil / Language", ["Türkçe", "English"], horizontal=True)
 lang_code = "tr" if lang_choice == "Türkçe" else "en"
 t = TRANSLATIONS[lang_code] 
