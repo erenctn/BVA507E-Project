@@ -2,9 +2,9 @@ import plotly.graph_objects as go
 import plotly.express as px
 import pandas as pd
 
-def plot_price_and_indicators(df, symbol, lang='tr'):
+def plot_price_and_indicators(df, symbol, lang='en'):
     """
-    TradingView benzeri, interaktif Candlestick grafiği.
+    TradingView-like, interactive Candlestick chart.
     """
     texts = {
         'tr': {'title': 'Detaylı Piyasa Analizi', 'price': 'Fiyat', 'upper': 'Üst Bant', 'lower': 'Alt Bant', 'y_axis': 'Fiyat ($)', 'all': 'TÜMÜ'},
@@ -14,7 +14,7 @@ def plot_price_and_indicators(df, symbol, lang='tr'):
 
     fig = go.Figure()
 
-    # 1. Mum Grafiği
+    # 1. Candlestick Chart
     fig.add_trace(go.Candlestick(
         x=df.index,
         open=df['Open'], high=df['High'], low=df['Low'], close=df['Close'],
@@ -22,7 +22,7 @@ def plot_price_and_indicators(df, symbol, lang='tr'):
         increasing_line_color='#26A69A', decreasing_line_color='#EF5350'
     ))
 
-    # 2. Bollinger Bantları
+    # 2. Bollinger Bands
     fig.add_trace(go.Scatter(
         x=df.index, y=df['Lower_BB'], 
         line=dict(color='rgba(0, 180, 255, 0.3)', width=1), 
@@ -62,9 +62,9 @@ def plot_price_and_indicators(df, symbol, lang='tr'):
     )
     return fig
 
-def plot_model_performance(metrics, lang='tr'):
+def plot_model_performance(metrics, lang='en'):
     """
-    PDF Gereksinimi: Tüm metrikleri (Acc, Prec, Rec, F1) karşılaştıran Gruplandırılmış Bar Grafiği.
+    PDF Requirement: Grouped Bar Chart comparing all metrics (Acc, Prec, Rec, F1).
     """
     texts = {
         'tr': {'title': '🏆 Model Performans Karnesi', 'y_axis': 'Skor Değeri', 'model': 'Model', 'metric': 'Metrik'},
@@ -72,7 +72,7 @@ def plot_model_performance(metrics, lang='tr'):
     }
     t = texts[lang]
 
-    # Nested Dictionary'yi Plotly için uygun DataFrame'e çeviriyoruz
+    # Converting Nested Dictionary to a DataFrame suitable for Plotly
     data_list = []
     for model_name, scores in metrics.items():
         for metric_name, value in scores.items():
@@ -90,10 +90,10 @@ def plot_model_performance(metrics, lang='tr'):
         x=t['model'], 
         y='Score', 
         color=t['metric'], 
-        barmode='group', # Barları yan yana dizer
+        barmode='group', # Arranges bars side by side
         title=f"<b>{t['title']}</b>",
         text_auto='.2f',
-        color_discrete_sequence=px.colors.qualitative.Pastel # Şık pastel renkler
+        color_discrete_sequence=px.colors.qualitative.Pastel # Stylish pastel colors
     )
     
     fig.update_layout(
@@ -101,7 +101,7 @@ def plot_model_performance(metrics, lang='tr'):
         plot_bgcolor="#131722", 
         paper_bgcolor="#131722",
         yaxis_title=t['y_axis'],
-        yaxis_range=[0, 1.15], # Üstte biraz boşluk kalsın
+        yaxis_range=[0, 1.15], # Leave some space at the top
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
         margin=dict(t=50, b=20, l=20, r=20),
         height=450

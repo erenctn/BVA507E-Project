@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-import random # Rastgelelik için eklendi
+import random # Added for randomness
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, HistGradientBoostingClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
@@ -33,14 +33,14 @@ class ModelAgent:
 
     def compare_and_train(self, df):
         """
-        Modelleri eğitir ve PDF gereksinimlerine göre 
-        Accuracy, Precision, Recall, F1 metriklerini hesaplar.
+        Trains models and calculates Accuracy, Precision, Recall, F1 metrics 
+        according to PDF requirements.
         """
         features = ['RSI', 'Volatility', 'Returns', 'Upper_BB', 'Lower_BB']
         X = df[features]
         y = df['Target']
         
-        # Zaman serisi olduğu için karıştırmadan (Shuffle=False) ayırıyoruz
+        # Since it is a time series, we split without shuffling (Shuffle=False)
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, shuffle=False)
         
         results = {}
@@ -49,13 +49,13 @@ class ModelAgent:
             model.fit(X_train, y_train)
             preds = model.predict(X_test)
             
-            # PDF Sayfa 9 - Tablo E'deki Metrikler:
+            # Metrics from PDF Page 9 - Table E:
             acc = accuracy_score(y_test, preds)
             prec = precision_score(y_test, preds, zero_division=0)
             rec = recall_score(y_test, preds, zero_division=0)
             f1 = f1_score(y_test, preds, zero_division=0)
             
-            # Sonuçları detaylı sakla
+            # Store results in detail
             results[name] = {
                 "Accuracy": acc,
                 "Precision": prec,
@@ -63,7 +63,7 @@ class ModelAgent:
                 "F1 Score": f1
             }
             
-        # Şampiyonu F1 Score belirler
+        # The champion is determined by F1 Score
         self.best_model_name = max(results, key=lambda x: results[x]['F1 Score'])
         self.best_model = self.models[self.best_model_name]
         self.metrics = results
@@ -71,18 +71,18 @@ class ModelAgent:
         return results, self.best_model_name
 
     def predict_current(self, current_row):
-        """Güncel veri ile tahmin yapar."""
+        """Makes a prediction with current data."""
         features = ['RSI', 'Volatility', 'Returns', 'Upper_BB', 'Lower_BB']
         input_data = pd.DataFrame([current_row], columns=features)
         
         probs = self.best_model.predict_proba(input_data)[0]
-        prediction = self.best_model.predict(input_data)[0] # 0 veya 1
+        prediction = self.best_model.predict(input_data)[0] # 0 or 1
         
-        # Eğer tahmin 1 (Yükseliş) ise 1 olma ihtimalini, değilse 0 olma ihtimalini al
+        # If prediction is 1 (Rise), take probability of 1, otherwise take probability of 0
         confidence = probs[1] if prediction == 1 else probs[0]
         
         return {
-            "prediction_id": int(prediction), # 1: Yükseliş, 0: Düşüş
+            "prediction_id": int(prediction), # 1: Rise, 0: Fall
             "probability": confidence,
             "used_model": self.best_model_name
         }

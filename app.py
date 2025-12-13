@@ -35,7 +35,7 @@ TRANSLATIONS = {
         "asset_label": "Varlık Seçin",
         "strategy_label": "Strateji Hedefi",
         "strategies": ["Kısa Vadeli Al-Sat (Riskli)", "Orta Vadeli Trend Takibi", "Defansif / Koruma Amaçlı"],
-        "lang_label": "Dil / Language",
+        "lang_label": "Language / Dil",
         "page_title": "CryptoSense: Otonom Kripto Yatırım Ajanı",
         "page_subtitle": "ReAct (Reasoning & Acting) mimarisi ile çalışan, kendi kendine karar veren yapay zeka asistanı.",
         "start_btn": "Analizi Başlat",
@@ -71,7 +71,7 @@ TRANSLATIONS = {
         "asset_label": "Select Asset",
         "strategy_label": "Strategy Goal",
         "strategies": ["Short-Term Trading (Risky)", "Mid-Term Trend Following", "Defensive / Preservation"],
-        "lang_label": "Dil / Language",
+        "lang_label": "Language / Dil",
         "page_title": "CryptoSense: Autonomous Multi-Agent AI System",
         "page_subtitle": "An AI assistant powered by ReAct (Reasoning & Acting) architecture that makes autonomous decisions.",
         "start_btn": "Start Analysis",
@@ -123,7 +123,7 @@ def translate_to_tr(text_input, client_instance):
 
 # --- SIDEBAR ---
 st.sidebar.title("CryptoSense")
-lang_choice = st.sidebar.radio("Dil / Language", ["Türkçe", "English"], horizontal=True)
+lang_choice = st.sidebar.radio("Language / Dil", ["English", "Türkçe"], horizontal=True)
 lang_code = "tr" if lang_choice == "Türkçe" else "en"
 t = TRANSLATIONS[lang_code] 
 

@@ -3,10 +3,10 @@ from bs4 import BeautifulSoup
 
 class NewsAgent:
     def __init__(self):
-        # DAHA GÜNCEL VE HIZLI KAYNAKLAR
-        # 1. Cointelegraph: Çok sık haber girer (En güncel).
-        # 2. Decrypt: Teknoloji ve kültür odaklıdır.
-        # 3. Yahoo Finance Crypto: Finansal odaklıdır.
+        # MORE UP-TO-DATE AND FAST SOURCES
+        # 1. Cointelegraph: Updates very frequently (Most up-to-date).
+        # 2. Decrypt: Technology and culture focused.
+        # 3. Yahoo Finance Crypto: Financially focused.
         self.rss_sources = [
             "https://cointelegraph.com/rss",
             "https://decrypt.co/feed",
@@ -15,7 +15,7 @@ class NewsAgent:
 
     def fetch_latest_news(self, limit=10):
         """
-        Birden fazla RSS kaynağından en son haberleri çeker ve birleştirir.
+        Fetches and combines the latest news from multiple RSS sources.
         """
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
@@ -24,7 +24,7 @@ class NewsAgent:
         all_news = []
         
         try:
-            # Kaynakları gez
+            # Iterate through sources
             for url in self.rss_sources:
                 try:
                     response = requests.get(url, headers=headers, timeout=5)
@@ -32,36 +32,36 @@ class NewsAgent:
                         soup = BeautifulSoup(response.content, features="xml")
                         items = soup.findAll('item')
                         
-                        # Her kaynaktan en yeni 4 haberi al (Toplamda çeşitlilik olsun)
+                        # Get the newest 4 news items from each source (To ensure diversity)
                         for item in items[:4]:
                             title = item.title.text.strip()
                             pub_date = item.pubDate.text.strip() if item.pubDate else ""
                             
-                            # Kaynak ismini belirle (Linkten veya URL'den)
+                            # Determine source name (From link or URL)
                             source_name = "News"
                             if "cointelegraph" in url: source_name = "CoinTelegraph"
                             elif "decrypt" in url: source_name = "Decrypt"
                             elif "yahoo" in url: source_name = "YahooFin"
                             
-                            # Listeye ekle
+                            # Add to list
                             all_news.append(f"- [{source_name}] {title} ({pub_date})")
                             
                 except Exception as e:
-                    print(f"Hata ({url}): {e}")
-                    continue # Bir kaynak çalışmazsa diğerine geç
+                    print(f"Error ({url}): {e}")
+                    continue # If one source fails, move to the next
 
-            # Eğer hiç haber yoksa
+            # If there is no news
             if not all_news:
-                return ["Haber kaynaklarına şu an ulaşılamıyor."]
+                return ["News sources are currently unreachable."]
 
-            # Toplanan haberlerden istenen limit kadarını döndür
-            # (Zaten her kaynaktan en yenileri aldığımız için karışık ve güncel bir liste olur)
+            # Return the requested limit from collected news
+            # (Since we already took the newest ones from each source, it will be a mixed and up-to-date list)
             return all_news[:limit]
 
         except Exception as e:
-            return [f"Genel Haber Hatası: {str(e)}"]
+            return [f"General News Error: {str(e)}"]
 
     def get_market_sentiment_prompt(self):
-        """LLM için haberleri metne döker."""
-        news = self.fetch_latest_news(limit=12) # Daha fazla veri gönderelim
+        """Converts news to text for LLM."""
+        news = self.fetch_latest_news(limit=12) # Let's send more data
         return "\n".join(news)
